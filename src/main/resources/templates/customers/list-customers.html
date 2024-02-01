@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Directory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+</head>
+
+<style>
+    .btn btn-primary mt-1 mb-2{
+    background-color:;
+    border-radius:35px;
+    }
+    .form{
+    display:inline-block;
+
+    }
+
+</style>
+
+<body>
+
+<div class="container">
+    <h3 style="text-align:center">Customer List</h3>
+    <hr>
+        <a style="height:2.5rem"  th:href="@{/customers/showFormForAdd}" class="btn btn-primary mt-1 mb-2">
+            Add Customer
+        </a>
+    <form th:action="@{/customers/}" class="form">
+         <input type="text" name="keyword" id="keyword" size="15"
+                       th:value="${keyword}" required /> &nbsp;
+        <input type="submit"
+               value="Search" style="" class="btn btn-primary mt-1 mb-2"/> &nbsp;
+
+
+    </form>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>
+                <a th:href="@{/customers/page/1(sortField='firstName', sortDir=${reverseSortDir})}">
+                    First Name
+                </a>
+            </th>
+            <th>
+                <a th:href="@{/customers/page/1(sortField='lastName', sortDir=${reverseSortDir})}">
+                    Last Name
+                </a>
+            </th>
+            <th>
+                <a th:href="@{/customers/page/1(sortField='street', sortDir=${reverseSortDir})}">
+                    Street
+                </a>
+            </th>
+            <th>
+                <a th:href="@{/customers/page/1(sortField='address', sortDir=${reverseSortDir})}">
+                    Address
+                </a>
+            </th>
+            <th>
+                <a th:href="@{/customers/page/1(sortField='city', sortDir=${reverseSortDir})}">
+                    City
+                </a>
+            </th>
+            <th>
+                <a th:href="@{/customers/page/1(sortField='state', sortDir=${reverseSortDir})}">
+                    State
+                </a>
+            </th>
+            <th>
+                <a th:href="@{/customers/page/1(sortField='email', sortDir=${reverseSortDir})}">
+                    Email
+                </a>
+            </th>
+            <th>
+                <a th:href="@{/customers/page/1(sortField='phone', sortDir=${reverseSortDir})}">
+                    Phone
+                </a>
+            </th>
+
+            <th>Action</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tempCustomer : ${customers}">
+            <td th:text="${tempCustomer.firstName}">First Name</td>
+            <td th:text="${tempCustomer.lastName}">Last Name</td>
+            <td th:text="${tempCustomer.street}">Street</td>
+            <td th:text="${tempCustomer.address}">Address</td>
+            <td th:text="${tempCustomer.city}">City</td>
+            <td th:text="${tempCustomer.state}">State</td>
+            <td th:text="${tempCustomer.email}">Email</td>
+            <td th:text="${tempCustomer.phone}">Phone</td>
+            <td>
+                <a th:href="@{/customers/showFormForUpdate(customerId=${tempCustomer.id})}" class="btn btn-info btn-sm">
+                    Update
+                </a>
+                <a th:href="@{/customers/delete/{customerId}(customerId=${tempCustomer.id})}" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure you want to delete this customer?');">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+    <div th:if="${totalPages > 1}">
+        <div class="row col-sm-10">
+            <div class="col-sm-2">
+                Total Rows: [[${totalItems}]]
+            </div>
+            <div class="col-sm-6">
+            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                <a th:if="${currentPage != i}" th:href="@{/customers/page/{pageNo}(pageNo=${i}, sortField=${sortField}, sortDir=${sortDir})}" th:text="${i}"></a>
+                <span th:unless="${currentPage != i}" th:text="${i}"></span>  &nbsp; &nbsp;
+            </span>
+            </div>
+            <div class="col-sm-1">
+                <a th:if="${currentPage lt totalPages}" th:href="@{/customers/page/{pageNo}(pageNo=${currentPage + 1}, sortField=${sortField}, sortDir=${sortDir})}">Next</a>
+                <span th:unless="${currentPage lt totalPages}">Next</span>
+            </div>
+            <div class="col-sm-1">
+                <a th:if="${currentPage lt totalPages}" th:href="@{/customers/page/{pageNo}(pageNo=${totalPages}, sortField=${sortField}, sortDir=${sortDir})}">Last</a>
+                <span th:unless="${currentPage lt totalPages}">Last</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+</html>
